@@ -8,6 +8,7 @@ import axios from "axios";
 function FacebookLoginAuth() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  console.log("Facebook login Auth rendered");
 
   const testAPI = (token, id) => {
     axios

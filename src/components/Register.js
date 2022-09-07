@@ -2,41 +2,70 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import FacebookLoginAuth from "./FacebookLoginAuth";
 import GoogleLoginAuth from "./GoogleLoginAuth";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormikInput from "./FormikInput";
+import FormikControl from "./FormikControl";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const initialValues = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const validationSchema = Yup.object({
+    email: Yup.string().required("Required"),
+    password: Yup.string().required("Required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), ""], "Password Not matched")
+      .required("Required"),
+  });
+
+  const onSubmit = (values) =>
+    console.log("Submitted register details", values);
+
   const handleSubmitForm = () => {
     alert(`${username} ${password}`);
   };
 
+  console.log("Register rendered");
+
   return (
     <div className="login">
       <h2>Register</h2>
-      <form onSubmit={handleSubmitForm}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Form>
+          <FormikControl
+            control="input"
             type="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
+            name="email"
+            label="Email"
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
+          <FormikControl
+            control="input"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            name="password"
+            label="Password"
           />
-        </div>
-        <button type="submit" className="btn">
-          Register
-        </button>
-      </form>
+          <FormikControl
+            control="input"
+            type="password"
+            name="confirmPassword"
+            label="Confirm Password"
+          />
+          <button type="submit" className="btn">
+            Register
+          </button>
+        </Form>
+      </Formik>
 
       <h4>-- or Login using --</h4>
       <div>

@@ -21,22 +21,31 @@ function GoogleLoginAuth() {
   };
 
   useEffect(() => {
-    /*global google */
-    window.google.accounts.id.initialize({
-      client_id:
-        "569690118224-fkooeq2v6ajdkhtp8lsao7ca0km0hrac.apps.googleusercontent.com",
-      callback: handleGoogleLogin,
-    });
+    try {
+      console.log("We are in try block");
+      window.google.accounts.id.initialize({
+        client_id:
+          "569690118224-spk6pqbjqom8fitheevqkcadf0j5iuib.apps.googleusercontent.com",
+        callback: handleGoogleLogin,
+      });
+    } catch (e) {
+      console.log("We are in catch block");
+      return new Error("Error caught in the API request");
+    }
 
-    window.google.accounts.id.renderButton(
-      document.getElementById("loginInDiv"),
-      {
-        theme: "filled_blue",
-        size: "medium",
-        shape: "circle",
-      }
-    );
-  }, []);
+    try {
+      window.google.accounts.id.renderButton(
+        document.getElementById("loginInDiv"),
+        {
+          theme: "filled_blue",
+          size: "medium",
+          shape: "circle",
+        }
+      );
+    } catch (e) {
+      console.log("New Error caught", e);
+    }
+  }, [handleGoogleLogin]);
   return (
     <div>
       <div id="loginInDiv"></div>

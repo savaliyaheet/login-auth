@@ -1,11 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink, Outlet } from "react-router-dom";
 import AuthContext from "../AuthStore/AuthProvider";
 
 function Home() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
-  const [count, setCount] = useState(0);
   const photoURL = localStorage.getItem("profile");
   const handleLogout = () => {
     /*global FB */
@@ -20,30 +19,32 @@ function Home() {
     console.log("logged Out");
   };
 
-  useEffect(() => {
-    const tick = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(tick);
-    };
-  }, [count]);
-
   return (
     <div>
-      <h2>Home Page</h2>
-      <h4>Hello, welcome {auth.user}</h4>
-      <img
-        src={photoURL}
-        alt=""
-        style={{
-          width: 100,
-          height: 100,
-        }}
-      />
-      <h1>{count}</h1>
-      <button onClick={handleLogout}>Logout</button>
+      <nav className="home__nav">
+        <ul>
+          <li>
+            <NavLink to="main">Main</NavLink>
+          </li>
+          <li>
+            <NavLink to="feature">Feature</NavLink>
+          </li>
+          <li>
+            <NavLink to="about">About</NavLink>
+          </li>
+          <li>
+            <NavLink to="contactus">Contact Us</NavLink>
+          </li>
+        </ul>
+        <div className="right_section">
+          <div className="profile_section">
+            <img src={photoURL} alt="" className="profile_section-img" />
+            <span>{auth.user}</span>
+          </div>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      </nav>
+      <Outlet />
     </div>
   );
 }
